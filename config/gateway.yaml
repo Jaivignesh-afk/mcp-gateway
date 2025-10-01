@@ -1,0 +1,10 @@
+servers:
+  nasdaq-data-link:
+    url: "http://nasdaq-mcp:8080/sse"  # Use service name as hostname in Docker Compose network
+
+transport:
+  type: sse
+  port: 8080
+
+security:
+  verify_signatures: true
