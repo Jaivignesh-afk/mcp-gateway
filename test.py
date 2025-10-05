@@ -11,11 +11,13 @@ load_dotenv()  # Load variables from .env file
 ZERODHA_API_KEY = os.getenv("KITE_API_KEY")
 ZERODHA_API_SECRET = os.getenv("API_SECRET")
 ZERODHA_REDIRECT_URI = os.getenv("ZERODHA_REDIRECT_URI")
- # Must match your app settings
+# Must match your app settings
+
 
 def generate_checksum(api_key: str, request_token: str, api_secret: str) -> str:
     msg = api_key + request_token + api_secret
     return hashlib.sha256(msg.encode()).hexdigest()
+
 
 def get_access_token(request_token: str) -> str:
     url = "https://api.kite.trade/session/token"
@@ -23,13 +25,14 @@ def get_access_token(request_token: str) -> str:
     payload = {
         "api_key": ZERODHA_API_KEY,
         "request_token": request_token,
-        "checksum": checksum
+        "checksum": checksum,
     }
     headers = {"X-Kite-Version": "3"}
     resp = requests.post(url, data=payload, headers=headers)
     resp.raise_for_status()
     data = resp.json()
     return data["data"]["access_token"]
+
 
 async def main():
     # print("Open this URL in your browser to login and authorize:")
@@ -57,16 +60,17 @@ async def main():
             for tool in tools_response.tools:
                 print(f"- {tool.name}: {tool.description}")
 
-            # tool_name = "get_stock_stats"
-            # args = {"symbol": "MSFT"}
+            tool_name = "search"
+            args = {"query": "What is stocks?", "max_results": 5}
 
-            # print(f"\nCalling tool '{tool_name}' with arguments {args}...")
-            # result = await session.call_tool(tool_name, args)
+            print(f"\nCalling tool '{tool_name}' with arguments {args}...")
+            result = await session.call_tool(tool_name, args)
 
-            # for content in result.content:
-            #     if getattr(content, "type", None) == "text":
-            #         print(content.text)
-                    # break
+            for content in result.content:
+                if getattr(content, "type", None) == "text":
+                    print(content.text)
+                    break
+
 
 if __name__ == "__main__":
     asyncio.run(main())
