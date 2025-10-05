@@ -1,11 +1,11 @@
 servers:
-  nasdaq-data-link:
-    url: "http://nasdaq-mcp:8080/sse"   # Use the Docker service name 'nasdaq-mcp' and port
-    secret_env: NASDAQ_DATA_LINK_API_KEY # Environment variable for the API key if needed
+  # Remove zerodha-kite URL - gateway handles it in stdio mode
+  duckduckgo:
+    url: http://duckduckgo:8080/sse
 
 transport:
   type: sse
-  port: 8080   # Port the gateway listens on for SSE connections
+  port: 8080
 
 security:
-  verify_signatures: true   # Security option for verifying request signatures
+  verify_signatures: true
